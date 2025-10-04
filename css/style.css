@@ -798,24 +798,53 @@ p {
 .contact-card ul {
   display: grid;
   gap: 1.1rem;
+  padding: 0;
+  margin: 0;
 }
 
-.contact-card li span {
-  display: block;
-  font-size: 0.8rem;
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.contact-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--accent);
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-label {
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--text-subtle);
-  margin-bottom: 0.3rem;
 }
 
-.contact-card li a {
+.contact-details a {
   color: var(--text-main);
   font-weight: 500;
 }
 
-.contact-card li p {
+.contact-details p {
   margin: 0;
+  color: var(--text-main);
+  font-weight: 500;
 }
 
 .note {

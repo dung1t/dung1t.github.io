@@ -76,16 +76,28 @@
                             </div>
                             <dl class="metrics">
                                 <div>
-                                    <dt>Tổng NAV</dt>
-                                    <dd>178 tỷ VND</dd>
+                                    <dt>Sharpe Ratio</dt>
+                                    <dd>1.84</dd>
                                 </div>
                                 <div>
-                                    <dt>Sharpe (YTD)</dt>
-                                    <dd>1.62</dd>
+                                    <dt>Alpha (YTD)</dt>
+                                    <dd>+12.7%</dd>
                                 </div>
                                 <div>
-                                    <dt>Drawdown max</dt>
-                                    <dd>-4.3%</dd>
+                                    <dt>Max Drawdown</dt>
+                                    <dd>-3.2%</dd>
+                                </div>
+                                <div>
+                                    <dt>Win Rate</dt>
+                                    <dd>68.4%</dd>
+                                </div>
+                                <div>
+                                    <dt>Calmar Ratio</dt>
+                                    <dd>3.97</dd>
+                                </div>
+                                <div>
+                                    <dt>VaR (95%)</dt>
+                                    <dd>-1.8%</dd>
                                 </div>
                             </dl>
                             <div class="status">
@@ -95,7 +107,7 @@
                         </div>
                         <div class="highlight-pill">
                             <span>AI Signal Engine</span>
-                            <p>Cập nhật tín hiệu 5 phút/lần dựa trên mô hình học máy thích ứng.</p>
+                            <p>Cập nhật tín hiệu 5 phút/lần dựa trên các mô hình Adaptive Learning.</p>
                         </div>
                     </div>
                 </div>
@@ -212,7 +224,7 @@
                     <div class="platform-grid">
                         <article class="platform-card">
                             <h3>Lõi tính toán</h3>
-                            <p>Engine C++ và Rust tối ưu latency, hỗ trợ chiến lược high-frequency và giao dịch phái sinh.</p>
+                            <p>Rust tối ưu latency, hỗ trợ chiến lược high-frequency và giao dịch phái sinh.</p>
                             <span class="chip">Latency &lt; 120 ms</span>
                         </article>
                         <article class="platform-card">
@@ -222,7 +234,7 @@
                         </article>
                         <article class="platform-card">
                             <h3>Lớp AI &amp; Signal</h3>
-                            <p>Pipeline học máy cập nhật liên tục, hỗ trợ reinforcement learning và mô hình biến động theo chế độ thị trường.</p>
+                            <p>Pipeline học máy cập nhật liên tục, hỗ trợ reinforcement learning và adaptive learning.</p>
                             <span class="chip">Model refresh 5 phút</span>
                         </article>
                         <article class="platform-card">
@@ -274,29 +286,42 @@
                         <span class="section-badge">Liên hệ</span>
                         <h2>Bắt đầu hành trình giao dịch định lượng của bạn</h2>
                         <p>Đặt lịch demo cá nhân hóa với đội ngũ chuyên gia Quant Trading để khám phá bộ giải pháp phù hợp nhất với mục tiêu đầu tư của bạn.</p>
-                        <div class="cta-actions">
-                            <a class="btn primary" href="mailto:thync@outlook.com">Đặt lịch demo</a>
-                            <a class="btn ghost" href="https://telegram.me/thync" target="_blank" rel="noopener">Trao đổi nhanh trên Telegram</a>
-                        </div>
                     </div>
                     <div class="contact-card">
                         <h3>Thông tin liên hệ</h3>
                         <ul>
-                            <li>
-                                <span>Email</span>
-                                <a href="mailto:thync@outlook.com">thync@outlook.com</a>
+                            <li class="contact-item">
+                                <span class="contact-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                                        <path d="M3.75 6.5c0-1.1.9-2 2-2h12.5c1.1 0 2 .9 2 2v11c0 1.1-.9 2-2 2H5.75c-1.1 0-2-.9-2-2v-11Zm2-.5a.5.5 0 0 0-.5.5v.32l7 4.28 7-4.28V6.5a.5.5 0 0 0-.5-.5H5.75Zm13.5 3.18-6.46 3.94a1 1 0 0 1-1.08 0L5.75 9.18V17.5c0 .28.22.5.5.5h12.5a.5.5 0 0 0 .5-.5V9.18Z"/>
+                                    </svg>
+                                </span>
+                                <div class="contact-details">
+                                    <span class="contact-label">Email</span>
+                                    <a href="mailto:dunglt@quant.vn">dunglt@quant.vn</a>
+                                </div>
                             </li>
-                            <li>
-                                <span>Điện thoại</span>
-                                <a href="tel:+84901112233">+84 901 112 233</a>
+                            <li class="contact-item">
+                                <span class="contact-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                                        <path d="m4.4 10.6 14.3-5.5c1.1-.42 2.1.57 1.7 1.66l-3 8.74a1.3 1.3 0 0 1-1.97.63l-3.4-2.28a.5.5 0 0 0-.57.02l-1.85 1.44a.8.8 0 0 1-1.25-.42l-.89-3.06-3.42-1.2c-1.1-.38-1.12-1.9-.03-2.25Z"/>
+                                    </svg>
+                                </span>
+                                <div class="contact-details">
+                                    <span class="contact-label">Telegram</span>
+                                    <a href="https://telegram.me/thync" target="_blank" rel="noopener">@thync</a>
+                                </div>
                             </li>
-                            <li>
-                                <span>Địa điểm</span>
-                                <p>Hà Nội &amp; TP. Hồ Chí Minh</p>
-                            </li>
-                            <li>
-                                <span>Tài liệu</span>
-                                <a href="#san-pham">Tải brochure PDF (đang cập nhật)</a>
+                            <li class="contact-item">
+                                <span class="contact-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                                        <path d="M12 2.75a7.25 7.25 0 0 1 7.25 7.25c0 4.78-4.88 9.93-6.68 11.57a.78.78 0 0 1-1.14 0C9.63 19.93 4.75 14.78 4.75 10A7.25 7.25 0 0 1 12 2.75Zm0 3a4.25 4.25 0 1 0 0 8.5 4.25 4.25 0 0 0 0-8.5Z"/>
+                                    </svg>
+                                </span>
+                                <div class="contact-details">
+                                    <span class="contact-label">Địa điểm</span>
+                                    <p>Hà Nội</p>
+                                </div>
                             </li>
                         </ul>
                         <p class="note">*Chúng tôi cam kết bảo mật mọi thông tin khách hàng.</p>
@@ -307,7 +332,7 @@
 
         <footer class="site-footer">
             <div class="container footer-layout">
-                <p>© <span id="current-year"></span> Quant Trading. Một sản phẩm của đội ngũ kỹ sư định lượng Việt Nam.</p>
+                <p>© <span id="current-year"></span> Quan.vn | Quant.com.vn</p>
                 <div class="footer-links">
                     <a href="#san-pham">Sản phẩm</a>
                     <a href="#bao-mat">Rủi ro &amp; tuân thủ</a>
