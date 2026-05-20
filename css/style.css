@@ -324,6 +324,8 @@ p {
   position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-primary {
@@ -423,6 +425,10 @@ p {
 
 .logo span {
   letter-spacing: -0.01em;
+}
+
+.site-nav {
+  margin-left: auto;
 }
 
 .site-nav ul {
@@ -710,6 +716,8 @@ p {
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .selector-btn.active {
@@ -1314,6 +1322,21 @@ p {
   .footer-links {
     width: 100%;
     justify-content: space-between;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .hero-actions .btn {
+    width: 100%;
+  }
+  
+  .chart-selectors {
+    grid-template-columns: 1fr;
   }
 }
 
