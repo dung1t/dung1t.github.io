@@ -40,11 +40,53 @@
 
             <nav class="site-nav" id="primary-navigation" aria-label="Điều hướng chính">
                 <ul>
-                    <li><a href="#tong-quan">Tổng quan</a></li>
-                    <li><a href="#san-pham">Sản phẩm</a></li>
-                    <li><a href="#chien-luoc">Quy trình</a></li>
-                    <li><a href="#nen-tang">Công nghệ</a></li>
-                    <li><a href="#bao-mat">Bảo mật</a></li>
+                    <li class="nav-dropdown">
+                        <a href="sector.html" class="nav-dropdown-toggle">
+                            Markets
+                            <svg class="nav-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <span class="dd-label">Markets</span>
+                            <a href="sector.html" class="dd-item">
+                                <span class="dd-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                                </span>
+                                <span class="dd-text">
+                                    <strong>Sector Radar</strong>
+                                    <small>Dòng tiền &amp; hiệu suất nhóm ngành</small>
+                                </span>
+                            </a>
+                            <a href="#" class="dd-item dd-disabled">
+                                <span class="dd-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                </span>
+                                <span class="dd-text">
+                                    <strong>Foreign Flow <span class="nav-badge-soon">Soon</span></strong>
+                                    <small>Giao dịch ròng khối ngoại</small>
+                                </span>
+                            </a>
+                            <a href="#" class="dd-item dd-disabled">
+                                <span class="dd-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                </span>
+                                <span class="dd-text">
+                                    <strong>Liquidity Map <span class="nav-badge-soon">Soon</span></strong>
+                                    <small>Thanh khoản &amp; khoảng trống giá</small>
+                                </span>
+                            </a>
+                            <div class="dd-divider"></div>
+                            <a href="#" class="dd-item dd-disabled">
+                                <span class="dd-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="7" cy="6" r="1" fill="currentColor"/><circle cx="17" cy="12" r="1" fill="currentColor"/><circle cx="11" cy="18" r="1" fill="currentColor"/></svg>
+                                </span>
+                                <span class="dd-text">
+                                    <strong>Stock Screener <span class="nav-badge-soon">Soon</span></strong>
+                                    <small>Lọc cổ phiếu theo điều kiện</small>
+                                </span>
+                            </a>
+                        </div>
+                    </li>
+                    <li><a href="#" class="nav-coming-soon" aria-disabled="true">Developer <span class="nav-badge-soon">Soon</span></a></li>
                 </ul>
             </nav>
 
@@ -56,6 +98,7 @@
             </button>
         </div>
     </header>
+    <div class="nav-backdrop" id="nav-backdrop"></div>
 
     <main>
         <!-- Hero Section -->
@@ -665,20 +708,33 @@
             // 3. Mobile Navigation Drawer Toggle
             const navToggle = document.getElementById('nav-toggle-btn');
             const primaryNav = document.getElementById('primary-navigation');
+            const navBackdrop = document.getElementById('nav-backdrop');
+
+            function openNav() {
+                primaryNav.classList.add('open');
+                navToggle.classList.add('open');
+                navToggle.setAttribute('aria-expanded', 'true');
+                if (navBackdrop) { navBackdrop.classList.add('open'); document.body.style.overflow = 'hidden'; }
+            }
+
+            function closeNav() {
+                primaryNav.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+                if (navBackdrop) { navBackdrop.classList.remove('open'); document.body.style.overflow = ''; }
+            }
 
             if (navToggle && primaryNav) {
                 navToggle.addEventListener('click', () => {
-                    const isOpen = primaryNav.classList.toggle('open');
-                    navToggle.classList.toggle('open');
-                    navToggle.setAttribute('aria-expanded', isOpen.toString());
+                    primaryNav.classList.contains('open') ? closeNav() : openNav();
                 });
 
-                // Close menu when clicking nav link
-                primaryNav.querySelectorAll('a').forEach(link => {
+                if (navBackdrop) navBackdrop.addEventListener('click', closeNav);
+
+                // Close menu when clicking nav link (skip disabled ones)
+                primaryNav.querySelectorAll('a:not(.dd-disabled):not(.nav-coming-soon)').forEach(link => {
                     link.addEventListener('click', () => {
-                        primaryNav.classList.remove('open');
-                        navToggle.classList.remove('open');
-                        navToggle.setAttribute('aria-expanded', 'false');
+                        closeNav();
                     });
                 });
             }
@@ -693,7 +749,7 @@
                     sharpe: "2.14",
                     dd: "-2.8%",
                     winrate: "72.5%",
-                    points: [180, 172, 168, 158, 142, 138, 120, 105, 98, 80, 65, 52, 40, 32, 22]
+                    points: [180, 178, 140, 145, 150, 110, 85, 95, 90, 88, 55, 60, 30, 25, 22]
                 },
                 trend: {
                     label: "Chiến lược Trend Following",
@@ -703,7 +759,7 @@
                     sharpe: "1.72",
                     dd: "-4.5%",
                     winrate: "62.8%",
-                    points: [185, 178, 180, 162, 150, 155, 130, 138, 115, 100, 108, 85, 90, 72, 58]
+                    points: [185, 188, 190, 185, 150, 155, 158, 120, 125, 122, 100, 105, 70, 65, 58]
                 },
                 arb: {
                     label: "Chiến lược Arbitrage",
@@ -713,7 +769,7 @@
                     sharpe: "3.48",
                     dd: "-0.9%",
                     winrate: "91.2%",
-                    points: [175, 168, 160, 153, 145, 138, 130, 122, 115, 107, 99, 92, 84, 76, 68]
+                    points: [175, 172, 165, 165, 150, 148, 148, 130, 125, 125, 110, 105, 90, 75, 68]
                 }
             };
 

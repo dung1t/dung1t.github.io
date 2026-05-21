@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quant API Demo Console</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #070913;
+            --bg-card: rgba(13, 17, 33, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #00f2fe;
+            --secondary: #7f00ff;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 40px 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(127, 0, 255, 0.03) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+        }
+
+        .header-title h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--bg-dark);
+            border: none;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .btn-run:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.35);
+        }
+
+        .api-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .api-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease;
+        }
+
+        .api-item:hover {
+            border-color: rgba(0, 242, 254, 0.2);
+        }
+
+        .api-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.01);
+            user-select: none;
+        }
+
+        .api-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .method {
+            background: rgba(0, 242, 254, 0.08);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid rgba(0, 242, 254, 0.15);
+        }
+
+        .api-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .url {
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-pending {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .badge-loading {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .api-body {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            display: none;
+        }
+
+        .api-body.active {
+            display: block;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
+            letter-spacing: 0.05em;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            padding: 18px;
+            border-radius: 8px;
+            max-height: 350px;
+            overflow-y: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+
+        .cors-help {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.03);
+            border: 1px dashed rgba(239, 68, 68, 0.2);
+            font-size: 0.85rem;
+            color: #f1f5f9;
+        }
+
+        .cors-help strong {
+            color: #f87171;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .cors-help p {
+            margin-bottom: 10px;
+            color: #94a3b8;
+        }
+
+        .cors-help pre {
+            background: #020617;
+            border-color: rgba(239, 68, 68, 0.1);
+            font-size: 0.8rem;
+            max-height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>Quant API Demo Console</h1>
+                <p>Kiểm tra trạng thái hoạt động và cấu trúc dữ liệu trả về từ hệ thống API.</p>
+            </div>
+            <button class="btn-run" id="btn-run-all">Gọi Tất Cả API</button>
+        </header>
+
+        <main class="api-list">
+            <!-- API Item 1 -->
+            <div class="api-item" id="api-1">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy toàn bộ mã ngành ICB</span>
+                        <span class="url">/sectors/icb-codes</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+
+            <!-- API Item 2 -->
+            <div class="api-item" id="api-2">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy dữ liệu kỹ thuật ngày (FPT)</span>
+                        <span class="url">/company/FPT/technical/ONE_DAY</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+
+            <!-- API Item 3 -->
+            <div class="api-item" id="api-3">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy xếp hạng ngành</span>
+                        <span class="url">/sector-ranking/sectors</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+
+            <!-- API Item 4 -->
+            <div class="api-item" id="api-4">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy thông tin chung các ngành</span>
+                        <span class="url">/sector-information</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+
+            <!-- API Item 5 -->
+            <div class="api-item" id="api-5">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy công ty theo ngành (Mã 8350)</span>
+                        <span class="url">/sector-information/8350/companies</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+
+            <!-- API Item 6 -->
+            <div class="api-item" id="api-6">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy top giao dịch ròng khối ngoại</span>
+                        <span class="url">/market-watch/v3/ForeignNetValue/top</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+
+            <!-- API Item 7 -->
+            <div class="api-item" id="api-7">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy khoảng trống &amp; thanh khoản (Gap)</span>
+                        <span class="url">/chart/v3/OHLCChart/gap-liquidity</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+
+            <!-- API Item 8 -->
+            <div class="api-item" id="api-8">
+                <div class="api-header">
+                    <div class="api-info">
+                        <span class="method">GET</span>
+                        <span class="api-name">Lấy biểu đồ khối lượng khối ngoại</span>
+                        <span class="url">/market-watch/v3/ForeignVolumeChart/getAll</span>
+                    </div>
+                    <span class="badge badge-pending">Sẵn sàng</span>
+                </div>
+                <div class="api-body">
+                    <span class="section-label">Kết quả phản hồi (Response JSON)</span>
+                    <pre class="response-container">Chưa chạy</pre>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Nạp thư viện API Client -->
+    <script src="js/api.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Xử lý đóng/mở nội dung API khi click vào header
+            const apiItems = document.querySelectorAll('.api-item');
+            apiItems.forEach(item => {
+                const header = item.querySelector('.api-header');
+                const body = item.querySelector('.api-body');
+                header.addEventListener('click', () => {
+                    body.classList.toggle('active');
+                });
+            });
+
+            // Định nghĩa các task API
+            const apiTasks = [
+                {
+                    id: 'api-1',
+                    action: () => QuantAPI.getAllIcbCodes()
+                },
+                {
+                    id: 'api-2',
+                    action: () => QuantAPI.getCompanyTechnical("FPT")
+                },
+                {
+                    id: 'api-3',
+                    action: () => QuantAPI.getSectorRanking()
+                },
+                {
+                    id: 'api-4',
+                    action: () => QuantAPI.getSectorInformation()
+                },
+                {
+                    id: 'api-5',
+                    action: () => QuantAPI.getSectorCompanies("8350")
+                },
+                {
+                    id: 'api-6',
+                    action: () => QuantAPI.getForeignNetValueTop()
+                },
+                {
+                    id: 'api-7',
+                    action: () => QuantAPI.getGapLiquidity()
+                },
+                {
+                    id: 'api-8',
+                    action: () => QuantAPI.getForeignVolumeChartAll()
+                }
+            ];
+
+            // Hàm thực thi một API cụ thể
+            async function runApi(task) {
+                const element = document.getElementById(task.id);
+                const badge = element.querySelector('.badge');
+                const responseContainer = element.querySelector('.response-container');
+                const body = element.querySelector('.api-body');
+
+                // Đổi trạng thái sang loading
+                badge.className = 'badge badge-loading';
+                badge.innerHTML = 'Đang tải...';
+                responseContainer.textContent = 'Đang gọi API, vui lòng đợi...';
+
+                try {
+                    const result = await task.action();
+                    
+                    // Thành công
+                    badge.className = 'badge badge-success';
+                    badge.innerHTML = 'Thành công';
+                    responseContainer.textContent = JSON.stringify(result, null, 2);
+                } catch (error) {
+                    // Thất bại
+                    badge.className = 'badge badge-error';
+                    badge.innerHTML = 'Lỗi';
+                    
+                    let errorMessage = `Error: ${error.message}\n`;
+                    
+                    // Thêm hướng dẫn hữu ích nếu có khả năng cao là lỗi CORS
+                    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        errorMessage += `\n[CẢNH BÁO] Có khả năng bạn đang gặp lỗi CORS (Cross-Origin Resource Sharing).\n`;
+                        errorMessage += `Trình duyệt chặn cuộc gọi từ trang web này tới API do backend chưa cho phép nguồn (Origin) này.\n\n`;
+                        
+                        responseContainer.innerHTML = errorMessage + 
+                        `<div class="cors-help">` +
+                            `<strong>Cách khắc phục lỗi CORS trên Backend (Rust):</strong>` +
+                            `<p>Bạn cần cấu hình thư viện CORS (ví dụ: tower-http trong axum, hoặc actix-cors trong actix-web) trên Rust backend để trả về header cho phép nguồn này.</p>` +
+                            `<pre># Ví dụ trong Actix-Web:\nuse actix_cors::Cors;\n\nlet cors = Cors::default()\n    .allow_any_origin() // Hoặc .allowed_origin("https://dung1t.github.io")\n    .allow_any_method()\n    .allow_any_header();</pre>` +
+                        `</div>`;
+                    } else {
+                        responseContainer.textContent = errorMessage;
+                    }
+                }
+            }
+
+            // Gọi tất cả API
+            async function runAll() {
+                // Mở tất cả các body để dễ quan sát
+                apiItems.forEach(item => {
+                    item.querySelector('.api-body').classList.add('active');
+                });
+
+                // Chạy song song
+                await Promise.all(apiTasks.map(task => runApi(task)));
+            }
+
+            // Gán sự kiện cho nút "Gọi Tất Cả"
+            document.getElementById('btn-run-all').addEventListener('click', runAll);
+
+            // Tự động kích hoạt gọi toàn bộ API khi truy cập trang
+            runAll();
+        });
+    </script>
+</body>
+</html>
